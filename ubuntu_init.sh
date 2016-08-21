@@ -68,6 +68,25 @@ sudo apt-get install git
 git config --global user.name "Colin Lin"
 git config --global user.email "colin.brat@gmail.com"
 git config --global color.ui.auto 
+
+## Optionally install git-kraken
+gitkraken_link=https://www.gitkraken.com/download/linux-deb
+read -p "Do you want to install GitKraken? [Y/N]" yn
+case $yn in
+    [Yy]* )
+        info "Starting to download gitkraken..."
+        wget $gitkraken_link --continue -O $HOME/Downloads/gitkraken.deb
+        dpkg -i $HOME/Downloads/gitkraken.deb 
+         
+        ;;
+    [Nn]*)
+        info "Opted out of GitKraken"
+        
+        ;;
+        *)
+        info "Default to not download " ;;
+esac
+
 info ".... install python tools ..."
 sudo apt-get install python3
 sudo apt-get install python-setuptools 
