@@ -15,7 +15,7 @@ BLUE="\e[0;34m"
 
 ## Variables 
 if [[ ! -d "$HOME/Downloads" ]]; then
-    mkdir $HOME/Downloads
+    mkdir -p $HOME/Downloads
 fi
 
 
@@ -50,7 +50,7 @@ info "... install cmake ..."
 wget -t 2 https://cmake.org/files/v3.5/cmake-3.5.2.tar.gz -O cmake.tar.gz 
 tar -xzf cmake.tar.gz
 pushd cmake-3.5.2/
-if [[ -z $(which cmake) ]]; then
+if ! hash cmake >/dev/null 2>&1; then
     # no prior cmake found 
     ./bootstrap 
     make 
@@ -108,7 +108,7 @@ ps_link_for_14=https://github.com/PowerShell/PowerShell/releases/download/v6.0.0
 ps_link_for_16=https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb
 info ".... Downloading Powershell ....."
 ubuntu_ver=$(lsb_release -r)
-ubuntu_ver=${ubuntu_ver##Release:}
+ubuntu_ver=${ubuntu_ver##Release: }
 ubuntu_ver=$(echo "${ubuntu_ver}" | xargs)
 if [[ ${ubuntu_ver:0:2} = '14' ]]; then
     wget ${ps_link_for_14} -O $HOME/Downloads/powershell_alpha.deb 
@@ -119,6 +119,6 @@ elif [[ ${ubuntu_ver:0:2} = '16' ]]; then
         sudo apt-get install libunwind8 libicu55
         sudo dpkg -i powershell_alpha.deb
 else
-    warning "Did not find matching Ubuntu version when downloading Powershell"
+    warning "Did not find matching Ubuntu version for ${ubuntu_ver} when downloading Powershell"
 
 fi
