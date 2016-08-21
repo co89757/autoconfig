@@ -28,6 +28,15 @@ fi
  echo -e "${GREEN} INFO: ... $1 ... ${END}\n"
 }
 
+warning()
+{
+    if [[ $# -ne 1 ]]; then
+        echo "usage: warning <message>"
+        exit -1
+    fi
+ echo -e "${YELLOW} WARNING: ... $1 ... ${END}\n"
+}
+
 ## Install dev essential tools 
 pushd "$HOME/Downloads"
 sudo apt-get update 
@@ -94,4 +103,22 @@ scp hl41@178.62.176.117:~/backup/bashrc.backup ~/.bashrc
 popd 
 
 # back to Downloads
-#
+# Downlaod powershell 
+ps_link_for_14=https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.14.04.1_amd64.deb
+ps_link_for_16=https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb
+info ".... Downloading Powershell ....."
+ubuntu_ver=$(lsb_release -r)
+ubuntu_ver=${ubuntu_ver##Release:}
+ubuntu_ver=$(echo "${ubuntu_ver}" | xargs)
+if [[ ${ubuntu_ver:1:2} = '14' ]]; then
+    wget ${ps_link_for_14} -O $HOME/Downloads/powershell_alpha.deb 
+    sudo apt-get install libunwind8 libicu52
+    sudo dpkg -i powershell_alpha.deb
+elif [[ ${ubuntu_ver:1:2} = '16' ]]; then
+    wget ${ps_link_for_16} -O $HOME/Downloads/powershell_alpha.deb
+        sudo apt-get install libunwind8 libicu55
+        sudo dpkg -i powershell_alpha.deb
+else
+    warning "Did not find matching Ubuntu version when downloading Powershell"
+
+fi

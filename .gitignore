@@ -1,0 +1,6 @@
+#vscode file
+/.vscode/
+#temp files
+*.bak
+*.tmp
+*.swap
