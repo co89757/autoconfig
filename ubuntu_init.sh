@@ -110,11 +110,11 @@ info ".... Downloading Powershell ....."
 ubuntu_ver=$(lsb_release -r)
 ubuntu_ver=${ubuntu_ver##Release:}
 ubuntu_ver=$(echo "${ubuntu_ver}" | xargs)
-if [[ ${ubuntu_ver:1:2} = '14' ]]; then
+if [[ ${ubuntu_ver:0:2} = '14' ]]; then
     wget ${ps_link_for_14} -O $HOME/Downloads/powershell_alpha.deb 
     sudo apt-get install libunwind8 libicu52
     sudo dpkg -i powershell_alpha.deb
-elif [[ ${ubuntu_ver:1:2} = '16' ]]; then
+elif [[ ${ubuntu_ver:0:2} = '16' ]]; then
     wget ${ps_link_for_16} -O $HOME/Downloads/powershell_alpha.deb
         sudo apt-get install libunwind8 libicu55
         sudo dpkg -i powershell_alpha.deb
