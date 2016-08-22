@@ -18,6 +18,11 @@ if [[ ! -d "$HOME/Downloads" ]]; then
     mkdir -p $HOME/Downloads
 fi
 
+if ! hash wget >/dev/null 2>&1; then
+    sudo apt-get install wget 
+fi
+
+DOWNLOADS="$HOME/Downloads"
 
 info()
 {
@@ -44,6 +49,13 @@ sudo apt-get update
 wget -t 2 https://download.sublimetext.com/sublime-text_build-3114_amd64.deb
 info "... install build-essentials...."
 sudo apt-get install build-essential
+
+#Install sogou pinyin input method 
+info "Installing Sogou Pinyin ...."
+sgpy_link=http://pinyin.sogou.com/linux/download.php?f=linux&bit=64
+wget -t 2 $sgpy_link -O $DOWNLOADS/sgpy.deb
+dpkg -i $DOWNLOADS/sgpy.deb  
+
 ## install checkinstall 
 sudo apt-get install checkinstall
 info "... install cmake ..."
@@ -62,20 +74,28 @@ else
 fi
 ## back to ~/Downloads
 popd 
+## Install Clion
+clion_link=https://download.jetbrains.com/cpp/CLion-2016.2.1.tar.gz
+info "....Downloading CLion-2016.2.1 ...."
+wget -t 2 $clion_link -O $DOWNLOADS/clion201621.tar.gz 
+
 # finish by installing some additional command line tools
 sudo apt-get install -y -q curl rsync tmux zip unzip unrar htop parallel
 sudo apt-get install git 
 git config --global user.name "Colin Lin"
 git config --global user.email "colin.brat@gmail.com"
 git config --global color.ui.auto 
-
+git config --global alias.ci commit 
+git config --global alias.co checkout 
+git config --global alias.st status  
+git config --global alias.br branch  
 ## Optionally install git-kraken
 gitkraken_link=https://www.gitkraken.com/download/linux-deb
 read -p "Do you want to install GitKraken? [Y/N]" yn
 case $yn in
     [Yy]* )
         info "Starting to download gitkraken..."
-        wget $gitkraken_link --continue -O $HOME/Downloads/gitkraken.deb
+        wget -t 2 $gitkraken_link --continue -O $HOME/Downloads/gitkraken.deb
         dpkg -i $HOME/Downloads/gitkraken.deb 
          
         ;;
@@ -141,3 +161,10 @@ else
     warning "Did not find matching Ubuntu version for ${ubuntu_ver} when downloading Powershell"
 
 fi
+vscode_link=https://go.microsoft.com/fwlink/?LinkID=760868
+##install VS Code
+info "Starting to download Visual Studio Code"
+wget $vscode_link --continue -t 2 -O $HOME/Downloads/vscode.deb 
+dpkg -i $HOME/Downloads/vscode.deb 
+
+
